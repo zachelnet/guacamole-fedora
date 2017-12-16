@@ -23,7 +23,7 @@ mysql -u root -p
 	quit
 
 cd guacamole-server-0.9.13-incubating/
-	export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # only fedora
+	export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # for gcc7
 	autoreconf -vif
 	./configure --with-init-dir=/etc/init.d
 	make && make install && ldconfig 
