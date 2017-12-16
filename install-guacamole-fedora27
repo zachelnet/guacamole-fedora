@@ -37,6 +37,7 @@ cd guacamole-client-0.9.13-incubating/
 	cp extensions/guacamole-auth-jdbc/modules/guacamole-auth-jdbc-mysql/target/guacamole-auth-jdbc-mysql-0.9.13-incubating.jar /usr/share/tomcat/.guacamole/extensions/
 	cat extensions/guacamole-auth-jdbc/modules/guacamole-auth-jdbc-mysql/schema/*.sql | mysql -u root -p guacamole
 
-> /etc/guacamole/guacamole.properties
+cd /etc/guacamole/
+wget https://raw.githubusercontent.com/zachelnet/guacamole-fedora/master/guacamole.properties
 ln -s /etc/guacamole/guacamole.properties /usr/share/tomcat/.guacamole/
 systemctl enable tomcat && systemctl restart tomcat
