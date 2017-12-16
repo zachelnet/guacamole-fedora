@@ -1,0 +1,54 @@
+yum install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
+yum -y groupinstall "Development Tools"
+yum -y install wget nano cairo-devel freerdp-devel git java-1.8.0-openjdk libjpeg-turbo-devel libpng-devel libssh2-devel libtelnet-devel libvncserver-devel libwebp-devel libvorbis-devel mariadb-server maven openssl-devel pango-devel pulseaudio-libs-devel terminus-fonts tomcat tomcat-admin-webapps tomcat-webapps uuid-devel ffmpeg-devel ffmpeg-libs freerdp1.2-devel freerdp1.2 libtool gnutls-devel libguac* maven haveged setroubleshoot cockpit-selinux selinux-policy-devel
+setenfore 0
+
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.tar.gz
+wget http://apache.mirrors.tds.net/guacamole/0.9.13-incubating/source/guacamole-client-0.9.13-incubating.tar.gz
+wget http://apache.mirrors.tds.net/guacamole/0.9.13-incubating/source/guacamole-server-0.9.13-incubating.tar.gz
+
+mkdir /usr/share/tomcat/.guacamole /usr/share/tomcat/.guacamole/{lib,extensions} /etc/guacamole
+tar -xvf guacamole-server-0.9.13-incubating.tar.gz 
+tar -xvf guacamole-client-0.9.13-incubating.tar.gz
+tar -xvf mysql-connector-java-5.1.44.tar.gz
+cp mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar /usr/share/tomcat/.guacamole/lib/
+
+systemctl enable mariadb.service && systemctl start mariadb.service
+mysql_secure_installation 
+mysql -u root -p
+	CREATE DATABASE IF NOT EXISTS guacamole DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+	GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole.* TO 'guacamole'@'localhost' IDENTIFIED BY 'guacamole' WITH GRANT OPTION;
+	GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole.* TO 'guacamole'@'127.0.0.1' IDENTIFIED BY 'guacamole' WITH GRANT OPTION;
+	flush privileges;
+	quit
+
+cd guacamole-server-0.9.13-incubating/
+	export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # only fedora
+	autoreconf -vif
+	./configure --with-init-dir=/etc/init.d
+	make && make install && ldconfig 
+	rm -rf /usr/lib64/freerdp/guac* 
+	ln -s /usr/local/lib/freerdp/* /usr/lib64/freerdp
+	/usr/lib/systemd/systemd-sysv-install enable guacd  && systemctl start guacd
+
+cd guacamole-client-0.9.13-incubating/
+	mvn package
+	cp guacamole/target/guacamole-0.9.13-incubating.war /usr/share/tomcat/webapps/guacamole.war 
+	cp extensions/guacamole-auth-jdbc/modules/guacamole-auth-jdbc-mysql/target/guacamole-auth-jdbc-mysql-0.9.13-incubating.jar /usr/share/tomcat/.guacamole/extensions/
+	cat extensions/guacamole-auth-jdbc/modules/guacamole-auth-jdbc-mysql/schema/*.sql | mysql -u root -p guacamole
+
+> /etc/guacamole/guacamole.properties
+echo "#Guacd"											>> /etc/guacamole/guacamole.properties
+echo "guacd-port: 4822"									>> /etc/guacamole/guacamole.properties
+echo "guacd-hostname: 127.0.0.1"						>> /etc/guacamole/guacamole.properties
+echo "# Mysql"											>> /etc/guacamole/guacamole.properties
+echo "mysql-hostname: localhost"						>> /etc/guacamole/guacamole.properties
+echo "mysql-port: 3306"									>> /etc/guacamole/guacamole.properties
+echo "mysql-database: guacamole"						>> /etc/guacamole/guacamole.properties
+echo "mysql-username: guacamole"						>> /etc/guacamole/guacamole.properties
+echo "mysql-password: guacamole"						>> /etc/guacamole/guacamole.properties
+echo "# Additional settings"							>> /etc/guacamole/guacamole.properties
+echo "mysql-default-max-connections-per-user: 0"		>> /etc/guacamole/guacamole.properties
+echo "mysql-default-max-group-connections-per-user: 0"	>> /etc/guacamole/guacamole.properties
+ln -s /etc/guacamole/guacamole.properties /usr/share/tomcat/.guacamole/
+systemctl enable tomcat && systemctl restart tomcat
