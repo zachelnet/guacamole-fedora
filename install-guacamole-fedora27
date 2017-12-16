@@ -38,17 +38,5 @@ cd guacamole-client-0.9.13-incubating/
 	cat extensions/guacamole-auth-jdbc/modules/guacamole-auth-jdbc-mysql/schema/*.sql | mysql -u root -p guacamole
 
 > /etc/guacamole/guacamole.properties
-echo "#Guacd"											>> /etc/guacamole/guacamole.properties
-echo "guacd-port: 4822"									>> /etc/guacamole/guacamole.properties
-echo "guacd-hostname: 127.0.0.1"						>> /etc/guacamole/guacamole.properties
-echo "# Mysql"											>> /etc/guacamole/guacamole.properties
-echo "mysql-hostname: localhost"						>> /etc/guacamole/guacamole.properties
-echo "mysql-port: 3306"									>> /etc/guacamole/guacamole.properties
-echo "mysql-database: guacamole"						>> /etc/guacamole/guacamole.properties
-echo "mysql-username: guacamole"						>> /etc/guacamole/guacamole.properties
-echo "mysql-password: guacamole"						>> /etc/guacamole/guacamole.properties
-echo "# Additional settings"							>> /etc/guacamole/guacamole.properties
-echo "mysql-default-max-connections-per-user: 0"		>> /etc/guacamole/guacamole.properties
-echo "mysql-default-max-group-connections-per-user: 0"	>> /etc/guacamole/guacamole.properties
 ln -s /etc/guacamole/guacamole.properties /usr/share/tomcat/.guacamole/
 systemctl enable tomcat && systemctl restart tomcat
