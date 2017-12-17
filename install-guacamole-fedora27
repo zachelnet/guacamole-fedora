@@ -20,8 +20,7 @@ mysql -u root -p <<EOF
 	GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole.* TO 'guacamole'@'localhost' IDENTIFIED BY 'guacamole' WITH GRANT OPTION;
 	GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole.* TO 'guacamole'@'127.0.0.1' IDENTIFIED BY 'guacamole' WITH GRANT OPTION;
 	flush privileges;
-	EOF
-
+EOF
 cd guacamole-server-0.9.13-incubating/
 	export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # for gcc7
 	autoreconf -vif
@@ -30,13 +29,12 @@ cd guacamole-server-0.9.13-incubating/
 	rm -rf /usr/lib64/freerdp/guac* 
 	ln -s /usr/local/lib/freerdp/* /usr/lib64/freerdp
 	/usr/lib/systemd/systemd-sysv-install enable guacd  && systemctl start guacd
-
+cd..
 cd guacamole-client-0.9.13-incubating/
 	mvn package
 	cp guacamole/target/guacamole-0.9.13-incubating.war /usr/share/tomcat/webapps/guacamole.war 
 	cp extensions/guacamole-auth-jdbc/modules/guacamole-auth-jdbc-mysql/target/guacamole-auth-jdbc-mysql-0.9.13-incubating.jar /usr/share/tomcat/.guacamole/extensions/
 	cat extensions/guacamole-auth-jdbc/modules/guacamole-auth-jdbc-mysql/schema/*.sql | mysql -u root -p guacamole
-
 cd /etc/guacamole/
 wget https://raw.githubusercontent.com/zachelnet/guacamole-fedora/master/guacamole.properties
 ln -s /etc/guacamole/guacamole.properties /usr/share/tomcat/.guacamole/
