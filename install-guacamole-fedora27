@@ -1,7 +1,7 @@
 yum install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
 yum -y groupinstall "Development Tools"
 yum -y install wget nano cairo-devel freerdp-devel git java-1.8.0-openjdk libjpeg-turbo-devel libpng-devel libssh2-devel libtelnet-devel libvncserver-devel libwebp-devel libvorbis-devel mariadb-server maven openssl-devel pango-devel pulseaudio-libs-devel terminus-fonts tomcat tomcat-admin-webapps tomcat-webapps uuid-devel ffmpeg-devel ffmpeg-libs freerdp1.2-devel freerdp1.2 libtool gnutls-devel libguac* maven haveged setroubleshoot cockpit-selinux selinux-policy-devel
-setenforce 0 && setsebool -P mysql_connect_http=1 selinuxuser_mysql_connect_enabled=1 httpd_can_network_connect_db=1
+setenforce 0 && setsebool -P mysql_connect_http=1 httpd_can_network_connect_db=1
 
 wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.tar.gz
 wget http://apache.mirrors.tds.net/guacamole/0.9.13-incubating/source/guacamole-client-0.9.13-incubating.tar.gz
