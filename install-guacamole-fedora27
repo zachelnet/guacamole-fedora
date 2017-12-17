@@ -15,12 +15,12 @@ cp mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar /usr/share/to
 
 systemctl enable mariadb.service && systemctl start mariadb.service
 mysql_secure_installation 
-mysql -u root -p
+mysql -u root -p <<EOF
 	CREATE DATABASE IF NOT EXISTS guacamole DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 	GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole.* TO 'guacamole'@'localhost' IDENTIFIED BY 'guacamole' WITH GRANT OPTION;
 	GRANT SELECT,INSERT,UPDATE,DELETE ON guacamole.* TO 'guacamole'@'127.0.0.1' IDENTIFIED BY 'guacamole' WITH GRANT OPTION;
 	flush privileges;
-	quit
+	EOF
 
 cd guacamole-server-0.9.13-incubating/
 	export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # for gcc7
