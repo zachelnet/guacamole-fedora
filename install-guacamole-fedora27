@@ -1,6 +1,6 @@
 dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 dnf -y groupinstall "Development Tools"
-dnf -y install cairo-devel freerdp-devel java-1.8.0-openjdk libjpeg-turbo-devel libpng-devel libssh2-devel libtelnet-devel libvncserver-devel libwebp-devel libvorbis-devel mariadb-server maven openssl-devel pango-devel pulseaudio-libs-devel terminus-fonts tomcat uuid-devel ffmpeg-devel ffmpeg-libs freerdp1.2-devel freerdp1.2 libtool gnutls-devel libguac* maven haveged setroubleshoot selinux-policy-devel
+dnf -y install cairo-devel freerdp-devel java-1.8.0-openjdk libjpeg-turbo-devel libpng-devel libssh2-devel libtelnet-devel libvncserver-devel libwebp-devel libvorbis-devel mariadb-server maven openssl-devel pango-devel pulseaudio-libs-devel terminus-fonts tomcat uuid-devel ffmpeg-devel ffmpeg-libs freerdp1.2-devel freerdp1.2 libtool gnutls-devel libguac* maven haveged setroubleshoot selinux-policy-devel mingw32-filesystem
 setenforce 0 && setsebool -P mysql_connect_http=1 httpd_can_network_connect_db=1
 
 wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
@@ -22,7 +22,7 @@ mysql -u root -p <<EOF
 	flush privileges;
 EOF
 cd guacamole-server-0.9.14/
-	export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # for gcc7
+	##export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # for gcc7
 	autoreconf -vif
 	./configure --with-init-dir=/etc/init.d
 	make && make install && ldconfig 
