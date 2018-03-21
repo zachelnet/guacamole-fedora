@@ -22,7 +22,7 @@ mysql -u root -p <<EOF
 	flush privileges;
 EOF
 cd guacamole-server-0.9.14/
-	##export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # for gcc7
+	export CFLAGS=" -Wno-error=format-overflow= -Wformat-overflow=0" # for gcc7
 	autoreconf -vif
 	./configure --with-init-dir=/etc/init.d
 	make && make install && ldconfig 
